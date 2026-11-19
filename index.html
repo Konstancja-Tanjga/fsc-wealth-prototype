@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Clickable concept: Salesforce Financial Services Cloud Client 360 with Agentforce, styled with SLDS 2. Fictional data.">
+<meta name="robots" content="noindex">
+<title>Wealth Advisor Client 360</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: Lightning-style app shell (header, app nav, demo path) over a record-page grid; Agentforce docks right at 398px. Colours follow SLDS 2 global styling hooks. */
+:root{
+  --bg:#f3f3f3; --surface:#ffffff; --tile:#f3f3f3; --border:#e5e5e5; --border-strong:#c9c9c9;
+  --ink:#03234d; --text:#2e2e2e; --muted:#5c5c5c;
+  --accent:#0250d9; --accent-fill:#066afe; --on-accent:#ffffff; --accent-soft:#eef4ff;
+  --ok-bg:#acf3e4; --ok-fg:#056764; --warn-bg:#f9e3b6; --warn-fg:#8c4b02; --err:#ba0517;
+  --ai-bg:#f1f5ff; --ai-ring:#b9ccff; --ai-label:#5a1ba9; --ai-label-bg:#f2e9ff;
+  --shadow:0 2px 2px rgba(0,0,0,.06), 0 0 1px rgba(0,0,0,.18);
+  --overlay:rgba(3,35,77,.45);
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17191c; --surface:#212428; --tile:#2a2e33; --border:#353a40; --border-strong:#4a5058;
+  --ink:#e6eefb; --text:#d5d9df; --muted:#a2a9b3;
+  --accent:#8db4ff; --accent-fill:#3b82ff; --on-accent:#ffffff; --accent-soft:#1f2b40;
+  --ok-bg:#103f39; --ok-fg:#7fe3cf; --warn-bg:#47330f; --warn-fg:#ffd28a; --err:#ff8a8a;
+  --ai-bg:#1b2333; --ai-ring:#33476e; --ai-label:#d9c2ff; --ai-label-bg:#33224d;
+  --shadow:0 0 0 1px #2c3036; --overlay:rgba(0,0,0,.6); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17191c; --surface:#212428; --tile:#2a2e33; --border:#353a40; --border-strong:#4a5058;
+  --ink:#e6eefb; --text:#d5d9df; --muted:#a2a9b3;
+  --accent:#8db4ff; --accent-fill:#3b82ff; --on-accent:#ffffff; --accent-soft:#1f2b40;
+  --ok-bg:#103f39; --ok-fg:#7fe3cf; --warn-bg:#47330f; --warn-fg:#ffd28a; --err:#ff8a8a;
+  --ai-bg:#1b2333; --ai-ring:#33476e; --ai-label:#d9c2ff; --ai-label-bg:#33224d;
+  --shadow:0 0 0 1px #2c3036; --overlay:rgba(0,0,0,.6); color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font:14px/1.45 var(--font);font-variant-numeric:tabular-nums}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+a{color:var(--accent);text-decoration:none;cursor:pointer}
+a:hover{text-decoration:underline}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent-fill);outline-offset:2px;border-radius:4px}
+.gutter{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* Header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface)}
+.hdr{display:flex;align-items:center;gap:16px;height:56px;border-bottom:1px solid var(--border)}
+.mark{width:32px;height:32px;border-radius:8px;background:var(--accent-fill);color:var(--on-accent);display:grid;place-items:center;font-weight:700;flex:none}
+.search{flex:1;max-width:520px;margin:0 auto;display:flex;align-items:center;gap:8px;border:1px solid var(--border-strong);border-radius:8px;padding:6px 10px;color:var(--muted);background:var(--surface)}
+.search input{border:0;outline:0;background:transparent;color:var(--text);width:100%;font:inherit}
+.af-btn{display:flex;align-items:center;gap:6px;border:1px solid var(--ai-ring);background:var(--ai-bg);color:var(--ink);border-radius:999px;padding:6px 12px;font-weight:600}
+.af-btn[aria-pressed="true"]{background:var(--accent-fill);color:var(--on-accent);border-color:var(--accent-fill)}
+.user{width:32px;height:32px;border-radius:50%;background:var(--ink);color:var(--surface);display:grid;place-items:center;font-size:12px;font-weight:600;flex:none}
+.nav{display:flex;align-items:stretch;gap:4px;height:40px;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
+.appname{display:flex;align-items:center;font-size:18px;color:var(--ink);padding-right:16px;white-space:nowrap}
+.tab{border:0;background:transparent;color:var(--text);padding:0 12px;white-space:nowrap;border-bottom:3px solid transparent}
+.tab[aria-current="page"]{border-bottom-color:var(--accent-fill);color:var(--accent);font-weight:600}
+.path{display:flex;align-items:center;gap:8px;padding-block:8px;background:var(--accent-soft);border-bottom:1px solid var(--border);flex-wrap:wrap}
+.path .lbl{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-right:4px}
+.steps{display:flex;gap:4px;flex-wrap:wrap;flex:1;min-width:0}
+.step{border:1px solid var(--border-strong);background:var(--surface);color:var(--text);border-radius:999px;padding:3px 10px;font-size:12px}
+.step[aria-current="step"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.step.done{border-color:var(--ok-fg);color:var(--ok-fg)}
+.btn{border:1px solid var(--border-strong);background:var(--surface);color:var(--accent);border-radius:8px;padding:5px 14px;font-weight:600;white-space:nowrap}
+.btn:hover{background:var(--accent-soft)}
+.btn.brand{background:var(--accent-fill);border-color:var(--accent-fill);color:var(--on-accent)}
+.btn.brand:hover{filter:brightness(1.08)}
+.concept{font-size:12px;color:var(--muted)}
+
+/* Shell */
+.shell{display:flex;align-items:flex-start;min-height:calc(100vh - 140px)}
+main{flex:1;min-width:0;padding-block:16px 48px}
+.panel{width:398px;flex:none;position:sticky;top:calc(env(safe-area-inset-top,0px) + 137px);height:calc(100vh - 137px);background:var(--ai-bg);border-left:1px solid var(--ai-ring);display:flex;flex-direction:column}
+
+/* Page header */
+.ph{background:var(--surface);border-radius:12px;box-shadow:var(--shadow);padding:16px;display:flex;flex-direction:column;gap:16px}
+.ph-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.objicon{width:40px;height:40px;border-radius:8px;display:grid;place-items:center;color:#fff;flex:none}
+.ph-title{flex:1;min-width:200px}
+.ph-type{font-size:12px;color:var(--muted)}
+h1{font-size:24px;font-weight:400;color:var(--ink);margin:0;line-height:1.2;text-wrap:balance}
+.ph-meta{font-size:12px;color:var(--muted)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.hl{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px 16px;border-top:1px solid var(--border);padding-top:12px}
+.hl dt{font-size:12px;color:var(--muted)} .hl dd{margin:0;color:var(--ink)}
+
+/* Grid */
+.cols{display:grid;grid-template-columns:320px minmax(0,1fr) 340px;gap:12px;margin-top:12px;align-items:start}
+.cols.two{grid-template-columns:minmax(0,1fr) 340px}
+.col{display:flex;flex-direction:column;gap:12px;min-width:0}
+.with-panel .cols{grid-template-columns:280px minmax(0,1fr)}
+.with-panel .cols.two{grid-template-columns:minmax(0,1fr)}
+.with-panel .col-right{grid-column:2}
+.with-panel .cols.two .col-right{grid-column:1}
+
+/* Card */
+.card{background:var(--surface);border-radius:12px;box-shadow:var(--shadow);padding:12px 16px 16px;min-width:0}
+.card-h{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.card-h h2{font-size:16px;font-weight:600;color:var(--ink);margin:0;flex:1}
+.ci{width:24px;height:24px;border-radius:6px;display:grid;place-items:center;color:#fff;flex:none}
+.c-acc{background:#7f4be0}.c-fin{background:#0b827c}.c-goal{background:#e3066a}.c-hh{background:#2a739e}.c-plan{background:#dd7a01}.c-int{background:#3b5bdb}.c-home{background:#0250d9}.c-person{background:#7f4be0}
+.fields{display:flex;flex-direction:column}
+.field{padding:8px 0;border-bottom:1px solid var(--border)}
+.field .l{font-size:12px;color:var(--muted)} .field .v{color:var(--ink)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.tile{background:var(--tile);border-radius:8px;padding:12px}
+.tile .l{font-size:12px;color:var(--muted)} .tile .v{font-size:22px;color:var(--ink);line-height:1.3} .tile .t{font-size:12px;color:var(--ok-fg)} .tile .t.neg{color:var(--muted)}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:520px}
+th{background:var(--tile);text-align:left;font-weight:600;font-size:13px;color:var(--text);padding:8px}
+td{padding:8px;border-bottom:1px solid var(--border);color:var(--text)}
+td.num,th.num{text-align:right}
+.badge{display:inline-flex;align-items:center;gap:4px;border-radius:4px;padding:2px 8px;font-size:12px;font-weight:600;white-space:nowrap}
+.b-ok{background:var(--ok-bg);color:var(--ok-fg)} .b-warn{background:var(--warn-bg);color:var(--warn-fg)} .b-info{background:var(--tile);color:var(--text)}
+.goal{padding:10px 0;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:6px}
+.goal-top{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.bar{height:6px;background:var(--border);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent-fill);border-radius:99px}
+.meta{font-size:12px;color:var(--muted)}
+.list-item{padding:8px 0;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:2px}
+.li-top{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.person{display:flex;gap:12px;align-items:center;padding:6px 0}
+.av{width:32px;height:32px;border-radius:50%;background:var(--accent-fill);color:var(--on-accent);display:grid;place-items:center;font-size:12px;font-weight:600;flex:none}
+.ai-label{display:inline-flex;gap:6px;align-items:center;background:var(--ai-label-bg);color:var(--ai-label);border-radius:4px;padding:2px 8px;font-size:12px;margin-bottom:4px}
+.new-row{animation:flash 1.6s ease-out}
+@keyframes flash{from{background:var(--accent-soft)}to{background:transparent}}
+
+/* Agentforce panel */
+.pnl-h{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--ai-ring);background:var(--surface)}
+.pnl-h h2{margin:0;font-size:18px;font-weight:400;color:var(--ink);flex:1}
+.icon-btn{border:0;background:transparent;color:var(--muted);width:32px;height:32px;border-radius:6px;display:grid;place-items:center}
+.icon-btn:hover{background:var(--accent-soft);color:var(--accent)}
+.feed{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px}
+.welcome{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding-top:24px}
+.orb{width:96px;height:96px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffffff 0,#cfe0ff 30%,#8fb3ff 65%,#7f4be0 100%);display:grid;place-items:center;color:#fff}
+.welcome h3{margin:4px 0 0;font-size:20px;font-weight:400;color:var(--ink)}
+.chips{display:flex;flex-direction:column;gap:8px;width:100%}
+.chip{border:1px solid var(--accent-fill);background:var(--surface);color:var(--accent);border-radius:999px;padding:10px 16px;text-align:left;font-weight:600;display:flex;justify-content:space-between;gap:8px}
+.chip:hover{background:var(--accent-soft)}
+.msg{display:flex;gap:10px;align-items:flex-start}
+.msg .who{width:28px;height:28px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:11px;font-weight:700}
+.msg.user .who{background:var(--ok-fg);color:var(--surface)}
+.msg.agent .who{background:linear-gradient(135deg,#066afe,#7f4be0);color:#fff}
+.bubble{min-width:0;flex:1;display:flex;flex-direction:column;gap:6px}
+.bubble .lead{color:var(--ink);font-weight:600}
+.rich{background:var(--surface);border:1px solid var(--ai-ring);border-radius:12px;padding:10px 12px;color:var(--text)}
+.rich p{margin:0 0 8px} .rich p:last-child{margin:0} .rich ol,.rich ul{margin:0 0 8px;padding-left:18px}
+.msg-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.fb{margin-left:auto;display:flex;gap:2px}
+.fb button[aria-pressed="true"]{color:var(--accent);background:var(--accent-soft)}
+.thinking{color:var(--muted);font-style:italic;background:linear-gradient(90deg,var(--muted) 0,var(--accent) 50%,var(--muted) 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 1.4s linear infinite}
+@keyframes shimmer{to{background-position:-200% 0}}
+.composer{padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--ai-ring);background:var(--ai-bg)}
+.composer form{border:1px solid var(--border-strong);border-radius:12px;background:var(--surface);padding:8px;display:flex;gap:8px;align-items:flex-end}
+.composer textarea{flex:1;border:0;outline:0;resize:none;background:transparent;color:var(--text);font:inherit;min-height:38px;max-height:120px}
+.disclaim{font-size:11px;color:var(--muted);margin-top:6px}
+
+/* Modal + toast */
+.scrim{position:fixed;inset:0;background:var(--overlay);display:grid;place-items:center;z-index:20;padding:16px}
+.modal{background:var(--surface);border-radius:12px;width:min(560px,100%);max-height:calc(100vh - 32px);display:flex;flex-direction:column;box-shadow:0 8px 32px rgba(0,0,0,.25)}
+.modal header{padding:16px 20px;border-bottom:1px solid var(--border)}
+.modal header h2{margin:0;font-size:20px;font-weight:400;color:var(--ink);text-align:center}
+.modal .mb{padding:16px 20px;overflow-y:auto;display:flex;flex-direction:column;gap:12px}
+.modal footer{padding:12px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;background:var(--tile);border-radius:0 0 12px 12px}
+label.fl{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}
+.inp{border:1px solid var(--border-strong);border-radius:6px;padding:7px 10px;font:inherit;color:var(--text);background:var(--surface);width:100%}
+textarea.inp{min-height:150px;resize:vertical}
+.check{display:flex;gap:8px;align-items:flex-start;color:var(--text);font-size:14px}
+.toasts{position:fixed;top:calc(env(safe-area-inset-top,0px) + 70px);left:50%;transform:translateX(-50%);z-index:30;display:flex;flex-direction:column;gap:8px;width:min(480px,calc(100% - 32px))}
+.toast{background:var(--ok-fg);color:var(--surface);border-radius:8px;padding:10px 14px;box-shadow:0 4px 16px rgba(0,0,0,.2);font-weight:600}
+.toast.info{background:var(--ink)}
+
+@media (max-width:1279px){
+  .panel{position:fixed;right:0;top:0;bottom:0;height:auto;z-index:15;box-shadow:-8px 0 24px rgba(0,0,0,.18);padding-top:env(safe-area-inset-top,0px);width:min(398px,100%);padding-right:env(safe-area-inset-right,0px)}
+  .with-panel .cols{grid-template-columns:320px minmax(0,1fr) 340px}
+  .with-panel .cols.two{grid-template-columns:minmax(0,1fr) 340px}
+  .with-panel .col-right,.with-panel .cols.two .col-right{grid-column:auto}
+}
+@media (max-width:1100px){
+  .cols,.cols.two,.with-panel .cols,.with-panel .cols.two{grid-template-columns:minmax(0,1fr)}
+  .col-right,.with-panel .col-right{grid-column:auto}
+}
+@media (max-width:640px){
+  .search{display:none} .hdr{justify-content:space-between} .af-btn span{display:none}
+  h1{font-size:20px}
+}
+@media (prefers-reduced-motion:reduce){
+  .thinking{animation:none;-webkit-text-fill-color:var(--muted)} .new-row{animation:none} *{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="hdr gutter">
+    <div class="mark" aria-hidden="true">W</div>
+    <label class="search" for="q">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" placeholder="Search clients, households, accounts…" autocomplete="off">
+    </label>
+    <button class="af-btn" id="afToggle" aria-pressed="false" aria-controls="panel">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l1.8 5.6L19 9.4l-5.2 1.8L12 17l-1.8-5.8L5 9.4l5.2-1.8zM19 14l.9 2.6 2.6.9-2.6.9L19 21l-.9-2.6-2.6-.9 2.6-.9z"/></svg>
+      <span>Agentforce</span>
+    </button>
+    <div class="user" title="Tomasz Wilk, advisor">TW</div>
+  </div>
+  <nav class="nav gutter" aria-label="Wealth Management">
+    <span class="appname">Wealth Management</span>
+    <button class="tab" data-go="home">Home</button>
+    <button class="tab" data-go="client">Clients</button>
+    <button class="tab" data-go="household">Households</button>
+    <button class="tab" data-go="account">Financial Accounts</button>
+    <button class="tab" data-soon="Financial Goals">Financial Goals</button>
+    <button class="tab" data-soon="Action Plans">Action Plans</button>
+    <button class="tab" data-soon="Reports">Reports</button>
+  </nav>
+  <div class="path gutter" aria-label="Demo path">
+    <span class="lbl">Demo path</span>
+    <div class="steps" id="steps"></div>
+    <button class="btn brand" id="next">Next step</button>
+  </div>
+</div>
+
+<div class="shell" id="shell">
+  <main class="gutter" id="main" tabindex="-1"></main>
+  <aside class="panel" id="panel" hidden aria-label="Agentforce">
+    <div class="pnl-h">
+      <h2>Agentforce</h2>
+      <button class="icon-btn" id="newChat" title="New conversation" aria-label="New conversation"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+      <button class="icon-btn" id="closePanel" title="Close" aria-label="Close Agentforce"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div class="feed" id="feed" aria-live="polite"></div>
+    <div class="composer">
+      <form id="composer">
+        <textarea id="ask" rows="1" placeholder="Describe your task or ask a question…" aria-label="Message Agentforce"></textarea>
+        <button class="btn brand" type="submit">Send</button>
+      </form>
+      <div class="disclaim">Concept prototype. Answers are scripted from the fictional records on this page.</div>
+    </div>
+  </aside>
+</div>
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+<div id="modalRoot"></div>
+
+<footer class="gutter concept" style="padding-block:16px 24px;border-top:1px solid var(--border);background:var(--surface)">
+  Independent concept by Konstancja Tanjga-Nawrot, styled with the open-source Salesforce Lightning Design System 2. Financial Services Cloud and Agentforce are Salesforce products; this is not a Salesforce product. All people, companies and amounts are fictional.
+</footer>
+
+<script>
+const $=s=>document.querySelector(s);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const S={view:'home',panel:false,msgs:[],busy:false,
+  plans:[{n:'Annual portfolio review',m:'3 of 5 tasks · Due 12/03/2027',b:'In Progress'},{n:'Mortgage refinancing',m:'1 of 4 tasks · Due 30/01/2027',b:'In Progress'},{n:'KYC document refresh',m:'4 of 4 tasks · Done 02/11/2026',b:'Completed'}],
+  notes:[{n:'Quarterly review meeting',m:'Meeting · 12/09/2026 · Tomasz Wilk',s:'Discussed rebalancing toward bonds and the holiday home goal.'},{n:'Call about mortgage rates',m:'Call · 28/10/2026 · Tomasz Wilk',s:'Client asked about refinancing; action plan created.'},{n:'Daughter’s fund contribution',m:'Email · 04/11/2026 · Service team',s:'Confirmed monthly contribution increase to PLN 3,000.'}],
+  briefSeen:false, newPlan:null, newNote:null};
+const ICON={acc:'<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4 21V9l8-6 8 6v12h-5v-6H9v6z"/></svg>',fin:'<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 10h18L12 4zM5 11h2v7H5zm4 0h2v7H9zm4 0h2v7h-2zm4 0h2v7h-2zM3 19h18v2H3z"/></svg>',goal:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>',hh:'<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="9" r="2.5"/><path d="M2 20c0-4 3-6 6-6s6 2 6 6zm12 0c0-2-.6-3.6-1.7-4.8 3.4-.9 7.7.6 7.7 4.8z"/></svg>',plan:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6h11M9 12h11M9 18h11M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></svg>',int:'<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16v12H8l-4 4z"/></svg>',person:'<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z"/></svg>',home:'<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 11 12 3l9 8v10h-6v-6H9v6H3z"/></svg>',star:'<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 5.6L19 9.4l-5.2 1.8L12 17l-1.8-5.8L5 9.4l5.2-1.8z"/></svg>'};
+const card=(icon,cls,title,body)=>`<section class="card"><div class="card-h"><span class="ci ${cls}">${ICON[icon]}</span><h2>${title}</h2></div>${body}</section>`;
+const fields=a=>`<div class="fields">${a.map(([l,v])=>`<div class="field"><div class="l">${l}</div><div class="v">${v}</div></div>`).join('')}</div>`;
+const tiles=a=>`<div class="tiles">${a.map(([l,v,t,neg])=>`<div class="tile"><div class="l">${l}</div><div class="v">${v}</div><div class="t${neg?' neg':''}">${t}</div></div>`).join('')}</div>`;
+const table=(cols,rows)=>`<div class="tw"><table><thead><tr>${cols.map(c=>`<th class="${c.num?'num':''}" scope="col">${c.h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map((v,i)=>`<td class="${cols[i].num?'num':''}">${v}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+const badge=b=>`<span class="badge ${b==='Completed'||b==='On Track'||b==='Active'?'b-ok':b==='At Risk'||b==='In Progress'?'b-warn':'b-info'}">${b}</span>`;
+const link=(t,go,extra='')=>`<a data-go="${go}" ${extra}>${t}</a>`;
+const soon=t=>`<a data-soon="${t}">${t}</a>`;
+const ph=(type,title,meta,iconCls,icon,actions,hl)=>`<section class="ph"><div class="ph-row"><span class="objicon ${iconCls}">${ICON[icon]}</span><div class="ph-title"><div class="ph-type">${type}</div><h1>${title}</h1><div class="ph-meta">${meta}</div></div><div class="actions">${actions.map(a=>`<button class="btn" data-act="${a}">${a}</button>`).join('')}</div></div>${hl?`<dl class="hl">${hl.map(([l,v])=>`<div><dt>${l}</dt><dd>${v}</dd></div>`).join('')}</dl>`:''}</section>`;
+const plansHTML=()=>S.plans.map((p,i)=>`<div class="list-item${S.newPlan===i?' new-row':''}"><div class="li-top">${soon(p.n)}${badge(p.b)}</div><div class="meta">${p.m}</div></div>`).join('');
+const notesHTML=()=>S.notes.map((p,i)=>`<div class="list-item${S.newNote===i?' new-row':''}">${soon(p.n)}<div class="meta">${p.m}</div><div>${p.s}</div></div>`).join('');
+const goalsHTML=g=>g.map(([n,pct,meta,b])=>`<div class="goal"><div class="goal-top">${soon(n)}${badge(b)}</div><div class="bar" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="${n} funded"><i style="width:${pct}%"></i></div><div class="meta">${meta}</div></div>`).join('');
+const people=a=>a.map(([i,n,r,go])=>`<div class="person"><span class="av">${i}</span><div>${go?link(n,go):soon(n)}<div class="meta">${r}</div></div></div>`).join('');
+
+const VIEWS={
+home:()=>`${ph('Home · Wealth Management','Good morning, Tomasz','Thursday, 19 November 2026 • 3 meetings • 5 clients need attention','c-home','home',[],null)}
+<div class="cols two"><div class="col">
+${card('home','c-home','Today’s Priorities',`<span class="ai-label">${ICON.star} This content is AI generated</span>
+<div class="list-item"><div class="li-top">${link('Holiday home goal at risk · Maria Kowalczyk','client')}</div><div class="meta">Goal · 23% funded · review tomorrow 10:00</div><div>Contribution is PLN 4,500/month below plan. Prepare options before the meeting.</div></div>
+<div class="list-item">${soon('Large cash inflow · Piotr Kowalczyk')}<div class="meta">Brokerage · 5520 · PLN 380,000 deposited 18/11</div><div>Cash is now 25% of the account. Suggest an allocation call this week.</div></div>
+<div class="list-item">${soon('Portfolio drift · 6 clients')}<div class="meta">Equity above model by more than 3 points</div><div>Rebalance proposals are ready for review.</div></div>`)}
+${card('person','c-person','Clients Needing Attention (5)',table([{h:'Client'},{h:'Signal'},{h:'Assets',num:1},{h:'Next Step'}],[[link('Maria Kowalczyk','client'),'Goal at risk','PLN 4,820,000.00','Review 20/11'],[soon('Piotr Kowalczyk'),'Cash 25% of account','PLN 2,250,000.00','Allocation call'],[soon('Ewa Zielińska'),'KYC expires in 14 days','PLN 1,140,000.00','Send KYC form'],[soon('Marek Wróbel'),'No contact for 7 months','PLN 3,060,000.00','Schedule review'],[soon('Studio Kowalczyk sp. z o.o.'),'Loan offer expiring','PLN 860,000.00','Call by 25/11']]))}
+${card('int','c-int','Today’s Meetings (3)',`<div class="list-item"><a data-brief="1">10:00 · Annual review · Maria Kowalczyk</a><div class="meta">Meeting · Office, Mokotowska 12</div><div>${S.briefSeen?'Brief ready':'Ask Agentforce for a brief'}</div></div>
+<div class="list-item">${soon('13:30 · Onboarding · Jan Lewandowski')}<div class="meta">Video call</div><div>Risk questionnaire sent, 2 of 3 documents received</div></div>
+<div class="list-item">${soon('16:00 · Estate planning · Marek Wróbel')}<div class="meta">Meeting · Client’s office</div><div>Bring trust structure options; notary joins at 16:30</div></div>`)}
+</div><div class="col col-right">
+${card('fin','c-fin','My Book of Business',`<div class="tiles" style="grid-template-columns:1fr">${[['Assets Under Management','PLN 412M','+2.6% this quarter'],['Clients','86','3 onboarding'],['Net New Assets (YTD)','PLN 31.4M','Target PLN 40M · 79%'],['Reviews Due This Month','12','5 scheduled']].map(([l,v,t])=>`<div class="tile"><div class="l">${l}</div><div class="v">${v}</div><div class="t">${t}</div></div>`).join('')}</div>`)}
+${card('plan','c-plan','My Tasks (3)',`<div class="list-item"><div class="li-top">${soon('Send KYC form · Ewa Zielińska')}${badge('In Progress')}</div><div class="meta">Due 21/11/2026</div></div><div class="list-item"><div class="li-top">${soon('Rebalance proposals · 6 clients')}${badge('In Progress')}</div><div class="meta">Due 22/11/2026</div></div><div class="list-item"><div class="li-top">${soon('Q4 review notes · Kowalczyk')}${badge('Completed')}</div><div class="meta">Done 19/11/2026</div></div>`)}
+</div></div>`,
+client:()=>`${ph('Person Account','Maria Kowalczyk','Premier client since 2014 • '+`<a data-go="household">Kowalczyk Household</a>`+' • Warsaw','c-person','person',['New Goal','Edit','New Referral','Log a Call'],[['Category','Premier'],['Total Assets','PLN 4.82M'],['Net Worth','PLN 4.18M'],['Liabilities','PLN 0.64M'],['Risk Tolerance','Moderate'],['Advisor','Tomasz Wilk'],['Last Review','12/09/2026'],['Next Review','20/11/2026']])}
+<div class="cols"><div class="col">
+${card('person','c-person','Client Details',fields([['Name','Maria Kowalczyk'],['Birthdate','14/05/1979'],['Email','m.kowalczyk@example.com'],['Mobile','+48 600 000 000'],['Mailing Address','ul. Mokotowska 12, 00-561 Warszawa'],['Occupation','Architect, own practice'],['Annual Income','PLN 540,000.00'],['Investment Experience','Experienced'],['Time Horizon','10+ years']]))}
+</div><div class="col">
+${card('fin','c-fin','Financial Summary',tiles([['Total Assets','PLN 4.82M','+3.4% vs last quarter'],['Total Liabilities','PLN 0.64M','−2.1% vs last quarter',1],['Net Worth','PLN 4.18M','+4.3% vs last quarter'],['Assets Under Mgmt','PLN 2.95M','+5.0% vs last quarter']]))}
+${card('fin','c-fin','Financial Accounts (5)',table([{h:'Financial Account'},{h:'Type'},{h:'Ownership'},{h:'Balance',num:1},{h:'Status'}],[[link('Investment Portfolio · 4471','account'),'Investment','Joint','PLN 1,960,000.00','Active'],[soon('IKE Retirement · 0915'),'Retirement','Primary','PLN 410,000.00','Active'],[soon('Savings · 2280'),'Savings','Joint','PLN 580,000.00','Active'],[soon('Current Account · 7731'),'Checking','Primary','PLN 92,450.00','Active'],[soon('Mortgage · 3302'),'Mortgage','Joint','PLN 640,000.00','Open']]))}
+${card('goal','c-goal','Financial Goals (3)',goalsHTML([['Retirement at 60',54,'PLN 1,340,000 of PLN 2,500,000 · Target 05/2039 · 54%','On Track'],['Daughter’s university fund',70,'PLN 168,000 of PLN 240,000 · Target 09/2030 · 70%','On Track'],['Holiday home, Mazury',23,'PLN 210,000 of PLN 900,000 · Target 06/2029 · 23%','At Risk']]))}
+</div><div class="col col-right">
+${card('hh','c-hh',`<a data-go="household">Household (4)</a>`,people([['MK','Maria Kowalczyk','Client · Head of Household'],['PK','Piotr Kowalczyk','Spouse · Joint owner'],['ZK','Zofia Kowalczyk','Daughter · Beneficiary'],['AN','Anna Nowak','Accountant · Professional']]))}
+${card('plan','c-plan',`Action Plans (${S.plans.length})`,plansHTML())}
+${card('int','c-int',`Interactions (${S.notes.length})`,notesHTML())}
+</div></div>`,
+household:()=>`${ph('Household','Kowalczyk Household','Premier household since 2014 • 4 members • Primary contact: '+link('Maria Kowalczyk','client'),'c-hh','hh',['New Goal','Edit','Add Member','Log a Call'],[['Category','Premier'],['Total Assets','PLN 5.31M'],['Net Worth','PLN 4.67M'],['Liabilities','PLN 0.64M'],['Members','4'],['Advisor','Tomasz Wilk'],['Last Review','12/09/2026'],['Next Review','20/11/2026']])}
+<div class="cols"><div class="col">
+${card('hh','c-hh','Household Details',fields([['Household Name','Kowalczyk Household'],['Primary Contact',link('Maria Kowalczyk','client')],['Members','4 (3 family, 1 professional)'],['Mailing Address','ul. Mokotowska 12, 00-561 Warszawa'],['Client Since','03/2014'],['Service Model','Premier · quarterly review'],['Household Risk Profile','Moderate']]))}
+</div><div class="col">
+${card('fin','c-fin','Household Summary',tiles([['Household Assets','PLN 5.31M','+3.1% vs last quarter'],['Household Liabilities','PLN 0.64M','−2.1% vs last quarter',1],['Household Net Worth','PLN 4.67M','+3.8% vs last quarter'],['Accounts','7','2 joint · 5 individual',1]]))}
+${card('person','c-person','Members (4)',table([{h:'Member'},{h:'Relationship'},{h:'Role in Household'},{h:'Total Assets',num:1}],[[link('Maria Kowalczyk','client'),'Self','Primary Member','PLN 2,890,000.00'],[soon('Piotr Kowalczyk'),'Spouse','Member','PLN 2,250,000.00'],[soon('Zofia Kowalczyk'),'Daughter','Member','PLN 168,000.00'],[soon('Anna Nowak'),'Accountant','Professional','—']]))}
+${card('fin','c-fin','Financial Accounts (5)',table([{h:'Financial Account'},{h:'Owner'},{h:'Type'},{h:'Balance',num:1}],[[link('Investment Portfolio · 4471','account'),'Maria & Piotr','Investment','PLN 1,960,000.00'],[soon('Piotr – Brokerage · 5520'),'Piotr','Investment','PLN 1,540,000.00'],[soon('Savings · 2280'),'Maria & Piotr','Savings','PLN 580,000.00'],[soon('IKE Retirement · 0915'),'Maria','Retirement','PLN 410,000.00'],[soon('University Fund · 6610'),'Zofia (minor)','Savings','PLN 168,000.00']]))}
+</div><div class="col col-right">
+${card('hh','c-hh','Relationship Map (5)',people([['MK','Maria Kowalczyk','Primary Member · Client','client'],['PK','Piotr Kowalczyk','Spouse of Maria'],['ZK','Zofia Kowalczyk','Daughter · Beneficiary'],['AN','Anna Nowak','Accountant · External'],['SK','Studio Kowalczyk sp. z o.o.','Business owned by Maria']]))}
+${card('plan','c-plan',`Action Plans (${S.plans.length})`,plansHTML())}
+</div></div>`,
+account:()=>`${ph('Financial Account','Investment Portfolio · 4471','Joint account • Maria & Piotr Kowalczyk • '+link('Kowalczyk Household','household'),'c-fin','fin',['Edit','New Transaction','Add Role','Log a Call'],[['Balance','PLN 1.96M'],['Type','Investment'],['Ownership','Joint'],['Status','Active'],['Model','Balanced 60/40 '+badge('Drift +4')],['YTD Return','+6.8%'],['Opened','03/2016'],['Advisor','Tomasz Wilk']])}
+<div class="cols"><div class="col">
+${card('fin','c-fin','Financial Account Details',fields([['Financial Account Number','PL61 1090 •••• 4471'],['Type','Investment Account'],['Ownership','Joint'],['Primary Owner',link('Maria Kowalczyk','client')],['Status','Active'],['Opened','03/2016'],['Model Portfolio','Balanced 60/40'],['Custodian','Example Brokerage S.A.']]))}
+</div><div class="col">
+${card('fin','c-fin','Account Summary',tiles([['Balance','PLN 1.96M','+2.7% vs last quarter'],['YTD Return','+6.8%','Benchmark +5.9%'],['Cash','PLN 84K','4.3% of portfolio',1],['Unrealized Gain','PLN 212K','Since inception']]))}
+${card('fin','c-fin','Holdings (5)',table([{h:'Holding'},{h:'Asset Class'},{h:'Market Value',num:1},{h:'Weight',num:1}],[[soon('Global Equity ETF'),'Equity','PLN 690,000.00','35.2%'],[soon('Polish Treasury Bonds 2031'),'Fixed Income','PLN 520,000.00','26.5%'],[soon('European Corporate Bond Fund'),'Fixed Income','PLN 380,000.00','19.4%'],[soon('Polish Equity Fund'),'Equity','PLN 286,000.00','14.6%'],['Cash','Cash','PLN 84,000.00','4.3%']]))}
+${card('int','c-int','Transactions (4)',table([{h:'Date'},{h:'Type'},{h:'Description'},{h:'Amount',num:1}],[['04/11/2026','Deposit','Monthly contribution','PLN 6,000.00'],['28/10/2026','Rebalance','Equity → bonds, per review','PLN 45,000.00'],['15/10/2026','Dividend','Global Equity ETF','PLN 3,120.00'],['30/09/2026','Fee','Advisory fee Q3','−PLN 2,450.00']]))}
+</div><div class="col col-right">
+${card('person','c-person','Financial Account Roles (4)',people([['MK','Maria Kowalczyk','Primary Owner','client'],['PK','Piotr Kowalczyk','Joint Owner'],['ZK','Zofia Kowalczyk','Beneficiary'],['TW','Tomasz Wilk','Advisor']]))}
+${card('int','c-int',`Interactions (${S.notes.length})`,notesHTML())}
+</div></div>`};
+
+/* Agentforce script */
+const PROMPTS={
+home:[['day','Summarize my day'],['attention','Which clients need attention?'],['brief','Prepare my 10:00 meeting']],
+client:[['brief','Prepare me for tomorrow’s review'],['holiday','What should I propose for the holiday home goal?'],['agenda','Draft the meeting agenda']],
+household:[['hh','Summarize the household'],['brief','Prepare Maria’s review']],
+account:[['drift','Is this account within its model?'],['ytd','Explain the YTD return']]};
+const A={
+day:{lead:'Your day · 19 November',html:'<p>3 meetings: 10:00 annual review with Maria Kowalczyk, 13:30 onboarding with Jan Lewandowski, 16:00 estate planning with Marek Wróbel.</p><p>Most urgent: Maria’s holiday home goal is at risk (23% funded). Piotr Kowalczyk has PLN 380,000 in new cash.</p>',acts:[['Open Maria’s brief','openBrief']]},
+attention:{lead:'5 clients need attention',html:'<ol><li><a data-go="client">Maria Kowalczyk</a>: goal at risk, review tomorrow</li><li>Piotr Kowalczyk: cash at 25% of the account</li><li>Ewa Zielińska: KYC expires in 14 days</li><li>Marek Wróbel: no contact for 7 months</li><li>Studio Kowalczyk sp. z o.o.: loan offer expires 25/11</li></ol><p>Signals come from goals, accounts, KYC dates and interaction history.</p>',acts:[]},
+brief:{lead:'Meeting brief · Maria Kowalczyk',html:'<p><b>Portfolio.</b> PLN 4.82M total assets, +3.4% this quarter. Investment Portfolio · 4471 drifted to 64% equity vs the 60/40 model.</p><p><b>Goals.</b> Retirement 54% and University fund 70% are on track. Holiday home is at risk: 23% funded, PLN 690K short of target.</p><p><b>Open work.</b> Mortgage refinancing plan, 1 of 4 tasks done; due 30/01/2027.</p>',acts:[['Save brief as note','note']]},
+holiday:{lead:'Options for the holiday home goal',html:'<p>Based on her moderate risk profile:</p><ol><li>Raise the monthly contribution from PLN 3,000 to PLN 7,500.</li><li>Move the target date from 06/2029 to 06/2031.</li><li>Use part of the PLN 580K savings as a one-off top-up.</li></ol><p>I can create an action plan for the option she picks.</p>',acts:[['Create action plan','plan']]},
+agenda:{lead:'Draft agenda · Annual review',html:'<ol><li>Portfolio performance and the 4-point equity drift</li><li>Goal review: holiday home funding options</li><li>Mortgage refinancing: next steps</li><li>Contribution plan for 2027</li></ol>',acts:[['Add agenda to the event','agenda']]},
+hh:{lead:'Kowalczyk Household',html:'<p>4 members, PLN 5.31M in assets across 7 accounts, net worth PLN 4.67M (+3.8% this quarter).</p><p>Piotr holds a separate brokerage account with PLN 380K of new cash. Zofia’s university fund is 70% funded.</p>',acts:[]},
+drift:{lead:'Model check · Investment Portfolio · 4471',html:'<p>The account is 4 points over the equity limit: 64% equity vs 60% in the Balanced 60/40 model. Fixed income is at 46% of the bond sleeve target.</p><p>A rebalance of about PLN 78,000 from equity to bonds brings it back within the model.</p>',acts:[['Create action plan','plan']]},
+ytd:{lead:'YTD return · +6.8%',html:'<p>The account returned +6.8% this year vs +5.9% for its benchmark. Most of the gain came from the Global Equity ETF; Polish treasury bonds added stability.</p><p>Fees so far: PLN 7,350.</p>',acts:[]}};
+const fallback={lead:'I can help with the suggested tasks',html:'<p>This concept answers the suggested prompts using the fictional records on this page. Try one of them:</p>',acts:[],chips:true};
+
+function renderFeed(){
+  const f=$('#feed');
+  if(!S.msgs.length){
+    const p=PROMPTS[S.view]||PROMPTS.home;
+    f.innerHTML=`<div class="welcome"><div class="orb">${ICON.star.replace(/12/g,'36')}</div><h3>Let’s chat</h3><p>Hi Tomasz, I’m Agentforce. I can brief you before meetings, find clients who need attention and draft follow-ups.</p><div class="chips">${p.map(([id,t])=>`<button class="chip" data-prompt="${id}">“${t}”<span aria-hidden="true">→</span></button>`).join('')}</div></div>`;
+    return;}
+  f.innerHTML=S.msgs.map((m,i)=>{
+    if(m.who==='user') return `<div class="msg user"><span class="who">TW</span><div class="bubble">${m.text}</div></div>`;
+    if(m.who==='thinking') return `<div class="msg agent"><span class="who">AI</span><div class="bubble"><span class="thinking">Thinking…</span></div></div>`;
+    const a=m.a; const p=PROMPTS[S.view]||PROMPTS.home;
+    return `<div class="msg agent"><span class="who">AI</span><div class="bubble"><span class="lead">${a.lead}</span><div class="rich">${a.html}${a.chips?`<div class="chips">${p.map(([id,t])=>`<button class="chip" data-prompt="${id}">“${t}”<span aria-hidden="true">→</span></button>`).join('')}</div>`:''}</div><div class="msg-actions">${a.acts.map(([t,act])=>`<button class="btn" data-agent="${act}">${t}</button>`).join('')}<span class="fb"><button class="icon-btn" aria-label="Good answer" aria-pressed="${m.fb==='up'}" data-fb="${i}:up">▲</button><button class="icon-btn" aria-label="Bad answer" aria-pressed="${m.fb==='down'}" data-fb="${i}:down">▼</button><button class="icon-btn" aria-label="Copy answer" data-copy="${i}">⧉</button></span></div></div></div>`;}).join('');
+  f.scrollTop=f.scrollHeight;
+}
+const labelOf=id=>{for(const v of Object.values(PROMPTS)) for(const [k,t] of v) if(k===id) return t; return id;};
+function send(id,text){
+  if(S.busy) return; openPanel(true);
+  S.msgs.push({who:'user',text:text||labelOf(id)}); S.msgs.push({who:'thinking'}); S.busy=true; renderFeed();
+  setTimeout(()=>{ S.msgs.pop(); S.msgs.push({who:'agent',a:A[id]||fallback}); S.busy=false; if(id==='brief') S.briefSeen=true; renderFeed(); renderSteps(); }, reduce?150:900);
+}
+function openPanel(on){ S.panel=on; $('#panel').hidden=!on; $('#afToggle').setAttribute('aria-pressed',on); $('#shell').classList.toggle('with-panel',on); renderFeed(); renderSteps(); }
+
+/* Modals */
+function modal(title,body,saveLabel,onSave){
+  $('#modalRoot').innerHTML=`<div class="scrim" id="scrim"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="mt"><header><h2 id="mt">${title}</h2></header><form id="mf"><div class="mb">${body}</div><footer><button type="button" class="btn" id="mc">Cancel</button><button type="submit" class="btn brand">${saveLabel}</button></footer></form></div></div>`;
+  const close=()=>{$('#modalRoot').innerHTML='';};
+  $('#mc').onclick=close; $('#scrim').onclick=e=>{if(e.target.id==='scrim') close();};
+  $('#mf').onsubmit=e=>{e.preventDefault(); onSave(new FormData(e.target)); close();};
+  document.addEventListener('keydown',function esc(e){if(e.key==='Escape'){close();document.removeEventListener('keydown',esc);}});
+  const first=$('#mf input, #mf textarea'); first&&first.focus();
+}
+function toast(t,info){ const el=document.createElement('div'); el.className='toast'+(info?' info':''); el.textContent=t; $('#toasts').appendChild(el); setTimeout(()=>el.remove(),3200); }
+const AGENT={
+plan:()=>modal('New Action Plan',`<p class="meta" style="margin:0">Drafted by Agentforce from the conversation. Review before saving.</p>
+<label class="fl" for="pn">Action plan name<input class="inp" id="pn" name="n" value="Holiday home goal · choose funding option"></label>
+<label class="fl" for="pd">Due date<input class="inp" id="pd" name="d" type="date" value="2026-12-15"></label>
+<fieldset style="border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:6px"><legend class="meta" style="margin-bottom:6px">Tasks</legend>
+${['Present 3 funding options at the review','Client chooses an option','Update goal target or contribution','Confirm change in writing'].map((t,i)=>`<label class="check" for="t${i}"><input type="checkbox" id="t${i}" name="t" value="${t}" checked> ${t}</label>`).join('')}</fieldset>`,'Save action plan',fd=>{
+  const n=fd.get('n')||'Action plan'; const tasks=fd.getAll('t').length; const d=(fd.get('d')||'').split('-').reverse().join('/');
+  S.plans.unshift({n,m:`0 of ${tasks} tasks · Due ${d}`,b:'In Progress'}); S.newPlan=0; render();
+  S.msgs.push({who:'agent',a:{lead:'Action plan created',html:`<p>“${n}” was added to Maria’s action plans with ${tasks} tasks, due ${d}.</p>`,acts:[]}}); renderFeed(); toast('Action plan created'); }),
+note:()=>modal('Save Brief as Interaction Summary',`<label class="fl" for="nt">Title<input class="inp" id="nt" name="n" value="Meeting brief · annual review"></label><label class="fl" for="ns">Summary<textarea class="inp" id="ns" name="s">Portfolio PLN 4.82M (+3.4% QoQ); 4-point equity drift in 4471. Holiday home goal at risk (23% funded). Mortgage refinancing 1 of 4 tasks done.</textarea></label>`,'Save note',fd=>{
+  S.notes.unshift({n:fd.get('n'),m:'Note · 19/11/2026 · Tomasz Wilk · drafted with Agentforce',s:fd.get('s')}); S.newNote=0; render(); toast('Interaction summary saved'); }),
+agenda:()=>modal('Add Agenda to Event',`<p class="meta" style="margin:0">Event: Annual review · Maria Kowalczyk · 20/11/2026, 10:00</p><label class="fl" for="ag">Agenda<textarea class="inp" id="ag" name="a">1. Portfolio performance and the 4-point equity drift
+2. Goal review: holiday home funding options
+3. Mortgage refinancing: next steps
+4. Contribution plan for 2027</textarea></label>`,'Add to event',()=>toast('Agenda added to the event')),
+openBrief:()=>{ go('client'); setTimeout(()=>send('brief','Prepare me for tomorrow’s review'),50); }
+};
+
+/* Demo path */
+const STEPS=[['Advisor Home','home'],['Client 360','client'],['Ask Agentforce','brief'],['Household','household'],['Financial Account','account']];
+function currentStep(){ if(S.view==='home') return 0; if(S.view==='client') return S.panel&&S.briefSeen?2:1; if(S.view==='household') return 3; return 4; }
+function renderSteps(){ const c=currentStep(); $('#steps').innerHTML=STEPS.map(([t],i)=>`<button class="step${i<c?' done':''}" data-step="${i}" ${i===c?'aria-current="step"':''}>${i+1}. ${t}</button>`).join(''); $('#next').textContent=c===4?'Start again':'Next step'; }
+function doStep(i){ if(i===0){openPanel(false); S.msgs=[]; go('home');} else if(i===1){go('client');} else if(i===2){ if(S.view!=='client') go('client'); send('brief','Prepare me for tomorrow’s review'); } else if(i===3){go('household');} else {go('account');} }
+
+/* Routing */
+function go(v){ if(!VIEWS[v]) v='home'; if(location.hash!=='#'+v){ location.hash=v; return; } S.view=v; render(); }
+function render(){ $('#main').innerHTML=VIEWS[S.view](); document.querySelectorAll('.tab[data-go]').forEach(t=>t.toggleAttribute('aria-current',false)); const tab=document.querySelector(`.tab[data-go="${S.view}"]`); if(tab) tab.setAttribute('aria-current','page'); renderSteps(); if(!S.msgs.length) renderFeed(); S.newPlan=null; S.newNote=null; }
+addEventListener('hashchange',()=>{ const v=location.hash.slice(1); S.view=VIEWS[v]?v:'home'; render(); scrollTo(0,0); $('#main').focus({preventScroll:true}); });
+
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-go],[data-soon],[data-act],[data-prompt],[data-agent],[data-fb],[data-copy],[data-step],[data-brief]'); if(!t) return;
+  if(t.dataset.go){ e.preventDefault(); go(t.dataset.go); }
+  else if(t.dataset.soon){ e.preventDefault(); toast(`“${t.dataset.soon}” is not part of this demo path`,1); }
+  else if(t.dataset.act){ const a=t.dataset.act; if(a==='Log a Call'||a==='New Goal'||a==='Edit'||a==='New Referral'||a==='Add Member'||a==='New Transaction'||a==='Add Role') toast(`${a} opens the standard Lightning form (not built in this demo)`,1); }
+  else if(t.dataset.prompt){ send(t.dataset.prompt); }
+  else if(t.dataset.agent){ AGENT[t.dataset.agent](); }
+  else if(t.dataset.fb){ const [i,v]=t.dataset.fb.split(':'); const m=S.msgs[+i]; m.fb=m.fb===v?null:v; renderFeed(); if(m.fb==='down') toast('Thanks. Feedback goes to the agent’s admin.',1); }
+  else if(t.dataset.copy){ const m=S.msgs[+t.dataset.copy]; const txt=m.a.lead+'\n'+m.a.html.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(); navigator.clipboard?.writeText(txt).then(()=>toast('Copied')).catch(()=>toast('Copy is blocked here. Select the text instead.',1)); }
+  else if(t.dataset.step){ doStep(+t.dataset.step); }
+  else if(t.dataset.brief){ e.preventDefault(); AGENT.openBrief(); }
+});
+$('#next').onclick=()=>{ const c=currentStep(); doStep(c===4?0:c+1); };
+$('#afToggle').onclick=()=>openPanel(!S.panel);
+$('#closePanel').onclick=()=>openPanel(false);
+$('#newChat').onclick=()=>{ S.msgs=[]; renderFeed(); };
+$('#composer').onsubmit=e=>{ e.preventDefault(); const v=$('#ask').value.trim(); if(!v) return; $('#ask').value=''; const low=v.toLowerCase(); const id=/brief|prepare|review/.test(low)?'brief':/holiday|goal/.test(low)?'holiday':/agenda/.test(low)?'agenda':/attention/.test(low)?'attention':/day/.test(low)?'day':/model|drift/.test(low)?'drift':'none'; send(id,v); };
+$('#ask').addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); $('#composer').requestSubmit(); } });
+$('#q').addEventListener('keydown',e=>{ if(e.key==='Enter'){ const v=e.target.value.toLowerCase(); if(v.includes('kowal')) go('client'); else toast('Try “Kowalczyk”: the demo has one client record',1); } });
+S.view=VIEWS[location.hash.slice(1)]?location.hash.slice(1):'home'; render();
+</script>
+</body>
+</html>
