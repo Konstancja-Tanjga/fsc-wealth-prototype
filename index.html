@@ -34,6 +34,9 @@
   --ai-bg:#1b2333; --ai-ring:#33476e; --ai-label:#d9c2ff; --ai-label-bg:#33224d;
   --shadow:0 0 0 1px #2c3036; --overlay:rgba(0,0,0,.6); color-scheme:dark}
 *{box-sizing:border-box}
+html,body{margin:0}
+[hidden]{display:none!important}
+img{max-width:100%}
 body{background:var(--bg);color:var(--text);font:14px/1.45 var(--font);font-variant-numeric:tabular-nums}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
 a{color:var(--accent);text-decoration:none;cursor:pointer}
